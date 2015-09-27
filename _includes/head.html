@@ -18,5 +18,40 @@
 
   <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 
+  <!-- Include highlight.js 7 (8.8.0 did not work for me) -->
+  <link rel="stylesheet" href="http://yandex.st/highlightjs/7.5/styles/default.min.css">
+  <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+
+  <!-- Include jquery.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <!-- No highlight on page load -->
+  <script type="text/javascript">
+    $( document ).ready(function() {
+     $("code").addClass("no-highlight");
+    });
+  </script>
+
+  <!-- hack to toggle highlight on or off -->
+  <script type="text/javascript">
+    function stripSpans(i, spanTag) {
+      var text = spanTag.textContent || spanTag.innerText;
+      var node = document.createTextNode(text);
+      spanTag.parentNode.replaceChild(node, spanTag);
+    }
+    $(function() {
+      $("button")
+        .click(function( event ) {
+          $("pre code").toggleClass("cpp");
+          $("pre code").toggleClass("no-highlight");
+          $("pre code").each(function(i, block) {
+            hljs.highlightBlock(block);
+          });
+          $("code.language-text.no-highlight").find("span").each(stripSpans);
+        });
+    });
+  </script>
 </head>
 

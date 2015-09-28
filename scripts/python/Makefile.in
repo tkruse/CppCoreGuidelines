@@ -4,10 +4,42 @@ default: all
 .PHONY: all
 all: \
 cpplint-all
+# compile-all
+# cppcheck-all
 
 CXX_SRCS := $(wildcard *.cpp)
+CXX_OBJS := ${CXX_SRCS:.cpp=.o}
 
-#### cpplint, check extracted sources using cpplint tool
+# TODO: better way to select correct clang name
+CC = clang
+
+CFLAGS  = -g -std=c++1y -stdlib=libc++
+
+## Not sure about Wall, since some code intentionally would generate warnings, while other code should not... Needs more thinking.
+# -Wall
+
+
+.PHONY: compile-all
+compile-all: check-clang $(CXX_OBJS)
+
+.PHONY: check-clang
+check-clang:
+	clang --version || (echo "Error, $(CC) not found" && false)
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@ || (cat $< | nl -ba | grep -v 'md-split' && false)
+
+#### cppcheck
+
+CXX_CHECK := ${CXX_SRCS:.cpp=.check}
+
+.PHONY: cppcheck-all
+cppcheck-all: $(CXX_CHECK)
+
+%.check: %.cpp
+	@cppcheck -q $< --error-exitcode=1 || (cat $< | nl -ba | grep -v 'md-split' && false)
+
+#### cpplint
 CXX_LINT := ${CXX_SRCS:.cpp=.lint}
 
 .PHONY: cpplint-all
@@ -15,4 +47,5 @@ cpplint-all: $(CXX_LINT)
 
 %.lint: %.cpp
 	@python ../../python/cpplint.py --verbose=0 --linelength=100 --filter=-legal/copyright,-build/include_order,-build/c++11,-build/namespaces,-build/class,-build/include,-build/include_subdir,-readability/inheritance,-readability/function,-readability/casting,-readability/namespace,-readability/alt_tokens,-readability/braces,-readability/fn_size,-whitespace/comments,-whitespace/braces,-whitespace/empty_loop_body,-whitespace/indent,-whitespace/newline,-runtime/explicit,-runtime/arrays,-runtime/int,-runtime/references,-runtime/string,-runtime/operator $< || (cat $< | nl -ba | grep -v 'md-split' && false)
+
 

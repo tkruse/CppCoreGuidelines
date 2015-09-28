@@ -20,7 +20,6 @@ check-notabs \
 hunspell-check \
 cpplint-all \
 check-badchars
-
 $(BUILD_DIR):
 	@mkdir -p $(BUILD_DIR)
 
@@ -67,6 +66,41 @@ check-notabs: $(SOURCEPATH) $(BUILD_DIR) Makefile
 # print file, add line numbers, remove tabs from nl tool, grep for remaining tabs, replace with stars
 	@cat ../CppCoreGuidelines.md | nl -ba | sed -s 's/\(^[^\t]*\)\t/\1--/g' | grep -P '\t' | sed -s 's/\t/\*\*\*\*/g' > $(BUILD_DIR)/CppCoreGuidelines.md.tabs
 	@if [ -s $(BUILD_DIR)/CppCoreGuidelines.md.tabs ]; then echo 'Warning: Tabs found:'; cat $(BUILD_DIR)/CppCoreGuidelines.md.tabs; false; fi;
+
+## can't get aspell to use a local dictionary
+# .PHONY: aspell-check
+# aspell-check: $(BUILD_DIR)/plain.txt
+# double $$ because of Make
+# 	cat $(BUILD_DIR)/plain.txt | aspell -a | grep -v '^$$'
+
+#### compile checker
+
+.PHONY: compile-all
+compile-all: $(BUILD_DIR)/codeblocks $(BUILD_DIR)/Makefile python/Makefile.in
+	cd $(BUILD_DIR)/codeblocks; $(MAKE) compile-all -k
+
+.PHONY: cppcheck-all
+cppcheck-all: $(BUILD_DIR)/codeblocks $(BUILD_DIR)/Makefile python/Makefile.in
+	cd $(BUILD_DIR)/codeblocks; $(MAKE) cppcheck-all -k
+
+.PHONY: cpplint-all
+cpplint-all: $(BUILD_DIR)/codeblocks $(BUILD_DIR)/Makefile python/Makefile.in
+	cd $(BUILD_DIR)/codeblocks; $(MAKE) cpplint-all -k
+
+#### generic makefile for sourceblocks (need to be evaluated after c++ file generation)
+
+$(BUILD_DIR)/Makefile: python/Makefile.in
+	cp python/Makefile.in $(BUILD_DIR)/codeblocks/Makefile
+
+#### split md file into plain text and code
+
+$(BUILD_DIR)/codeblocks: splitfile
+
+$(BUILD_DIR)/plain.txt: splitfile
+
+.PHONY: splitfile
+splitfile: $(SOURCEPATH) ./python/md-split.py
+	python ./python/md-split.py $(SOURCEPATH) $(BUILD_DIR)/plain.txt $(BUILD_DIR)/codeblocks
 
 .PHONY: check-badchars
 check-badchars: $(SOURCEPATH) $(BUILD_DIR) Makefile

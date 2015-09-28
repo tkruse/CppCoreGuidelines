@@ -1,0 +1,10 @@
+{
+  "settings": {
+    "pedantic": true,
+    "bullet": "*",
+    "listItemIndent": "1",
+    "strong": "*",
+    "emphasis": "*"
+  }
+
+}

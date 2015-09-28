@@ -1,0 +1,8 @@
+{
+  "name": "CppCoreGuidelinesCheck",
+  "version": "0.0.0",
+  "description": "",
+  "dependencies": {
+    "mdast": "~2.0.0"
+  }
+}

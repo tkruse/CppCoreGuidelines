@@ -57,6 +57,11 @@ check-references: $(SOURCEPATH) $(BUILD_DIR) Makefile
 	@grep -oP '(?<=<a name=")[^\"]+' $(SOURCEPATH) | sort | uniq -d > $(BUILD_DIR)/$(SOURCEFILE).uniq
 ## check if output has data
 	@if [ -s "build/CppCoreGuidelines.md.uniq" ]; then echo 'Found duplicate anchors:'; cat $(BUILD_DIR)/$(SOURCEFILE).uniq; false; fi
+# check external links point to existig site [foo](http://notexist.com)
+.PHONY: check-links
+check-links: nodejs/node_modules/grunt nodejs/Gruntfile.js $(SOURCEPATH)
+	cd nodejs; ./node_modules/.bin/grunt deadlink | grep 'error : 0 '
+
 
 .PHONY: check-notabs
 check-notabs: $(SOURCEPATH) $(BUILD_DIR) Makefile

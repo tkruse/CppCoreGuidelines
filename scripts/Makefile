@@ -62,6 +62,16 @@ check-references: $(SOURCEPATH) $(BUILD_DIR) Makefile
 ## check if output has data
 	@if [ -s "build/CppCoreGuidelines.md.uniq" ]; then echo 'Found duplicate anchors:'; cat $(BUILD_DIR)/$(SOURCEFILE).uniq; false; fi
 
+# check external links point to existing site [foo](http://notexist.com)
+.PHONY: check-links
+check-links: nodejs/node_modules/grunt nodejs/Gruntfile.js $(SOURCEPATH)
+	cd nodejs; ./node_modules/.bin/grunt -v deadlink
+# sadly deadlink is stupid, does not report on stdout, never terminates when writing to log
+#	rm -f nodejs/deadlink.log
+#	cd nodejs; ./node_modules/.bin/grunt deadlink
+#	if [ -f nodejs/deadlink.log]; then cat nodejs/deadlink.log; false; fi
+
+
 .PHONY: check-notabs
 check-notabs: $(SOURCEPATH) $(BUILD_DIR) Makefile
 	@echo '##################### Tabs check ##################'

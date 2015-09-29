@@ -4,9 +4,46 @@
     "description": "CppCoreGuidelines Check",
     "private": true,
     "dependencies": {
+        "grunt": "^0.4.5",
+        "grunt-cli": "^0.1.13",
+        "grunt-deadlink": "^0.1.4",
         "remark": "^4.2.2",
         "remark-lint": "^4.0.2",
         "remark-lint-sentence-newline": "^2.0.0",
-        "remark-validate-links": "^4.1.0"
+        "remark-validate-links": "^4.1.0",
+        "remark-lint-are-links-valid": "^1.0.2",
+        "remark-validate-links": "^3.0.0",
+        "underscore": "^1.8.3"
+    },
+    "remarkConfig": {
+        "plugins": {
+            "remark-lint": {
+                "unordered-list-marker-style": "consistent",
+                "list-item-bullet-indent": false,
+                "list-item-indent": false,
+                "list-item-spacing": false,
+                "no-html": false,
+                "maximum-line-length": false,
+                "no-file-name-mixed-case": false,
+                "heading-increment": false,
+                "no-multiple-toplevel-headings": false,
+                "no-consecutive-blank-lines": false,
+                "maximum-line-length": 9000,
+                "maximum-heading-length": 300,
+                "no-heading-punctuation": false,
+                "no-duplicate-headings": false,
+                "emphasis-marker": "*",
+                "no-tabs": false,
+                "blockquote-indentation": false,
+                "strong-marker": "*",
+                "external": ["remark-lint-are-links-valid"]
+            }
+        },
+        "settings": {
+            "bullet": "*",
+            "listItemIndent": "1",
+            "strong": "*",
+            "emphasis": "*"
+        }
     }
 }

@@ -19,7 +19,6 @@ install:
 
 script:
  - cd scripts; make -k
- - cd ..
 
 notifications:
   email: false

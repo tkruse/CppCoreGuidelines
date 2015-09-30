@@ -51,7 +51,6 @@ show-diff: nodejs/node_modules/remark nodejs/package.json $(SOURCEPATH) $(BUILD_
 	diff $(SOURCEPATH) $(BUILD_DIR)/$(SOURCEFILE).fixed -u3 || \
 	(echo "Error: remark found bad markdown syntax, see output above" && false)
 
-
 .PHONY: check-references
 check-references: $(SOURCEPATH) $(BUILD_DIR) Makefile
 ## check references unique

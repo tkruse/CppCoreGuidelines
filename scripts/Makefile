@@ -52,7 +52,6 @@ show-diff: nodejs/node_modules/remark nodejs/remark/.remarkrc $(SOURCEPATH) $(BU
 	diff $(SOURCEPATH) $(BUILD_DIR)/$(SOURCEFILE).fixed -u3 || \
 	(echo "Error: remark found bad markdown syntax, see output above" && false)
 
-
 .PHONY: check-references
 check-references: $(SOURCEPATH) $(BUILD_DIR) Makefile
 	@echo '##################### References check ##################'
@@ -130,6 +129,23 @@ $(BUILD_DIR)/plain-nohtml.txt: $(BUILD_DIR)/plain.txt
 .PHONY: splitfile
 splitfile: $(SOURCEPATH) ./python/md-split.py
 	@python ./python/md-split.py $(SOURCEPATH) $(BUILD_DIR)/plain.txt $(BUILD_DIR)/codeblocks
+
+#### Produce interim file with fenced code blocks for highlighting
+
+$(BUILD_DIR)/$(SOURCEFILE).fenced: nodejs/node_modules/remark nodejs/remark/.remarkrc $(SOURCEPATH) Makefile
+# run remark, paste output to temporary file
+	cd nodejs; ./node_modules/.bin/remark ../$(SOURCEPATH) --no-color -q --config-path ./remark/.remarkrc-fenced 1> ../$(BUILD_DIR)/$(SOURCEFILE).fenced --frail
+
+$(BUILD_DIR)/$(SOURCEFILE).coded: nodejs/node_modules/remark nodejs/remark/.remarkrc Makefile $(BUILD_DIR)/$(SOURCEFILE).fenced
+	sed ':a;N;$$!ba;s/\n\n\(\s*\)```/\n\n\1```cpp/g' $(BUILD_DIR)/$(SOURCEFILE).fenced > $(BUILD_DIR)/$(SOURCEFILE).coded
+
+#### PDF, requires pandoc and latex.
+
+$(BUILD_DIR)/$(SOURCEFILE).texlabels: Makefile $(BUILD_DIR)/$(SOURCEFILE).coded
+	sed 's/<a name="/\\label{/g' $(BUILD_DIR)/$(SOURCEFILE).coded | sed 's/"><\/a>/\}/g' > $(BUILD_DIR)/$(SOURCEFILE).texlabels
+
+$(BUILD_DIR)/CppCoreGuidelines.pdf: Makefile $(BUILD_DIR)/$(SOURCEFILE).texlabels
+	cd ..; pandoc -f markdown -t latex --latex-engine=xelatex --variable fontsize=11pt --variable papersize=a4paper --variable geometry=margin=2.4cm -o scripts/$(BUILD_DIR)/CppCoreGuidelines.pdf scripts/$(BUILD_DIR)/$(SOURCEFILE).texlabels
 
 #### install npm modules
 # install/update npm dependencies defined in file package.json

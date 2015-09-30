@@ -61,3 +61,27 @@
 .tar_download_link:hover {
   background: url(../images/sprite_download.png) no-repeat top right;
 }
+
+@media print {
+    .sidebar,.banner, a:after {
+        display: none;
+    }
+    .container {
+        width: 90%;
+        margin: 2em;
+        padding: 0px;
+    }
+    .* {
+        color: #000;
+        background-color: #fff;
+        @include box-shadow(none);
+        @include text-shadow(none);
+    }
+    code,p {
+        page-break-inside:avoid;
+        page-break-before:avoid;
+    }
+    h1,h2,h3,h4,h5,strong {
+        page-break-after:avoid;
+    }
+}

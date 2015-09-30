@@ -27,10 +27,20 @@
 
   <script>hljs.initHighlightingOnLoad();</script>
 
+  <!-- make sure you include the latest version -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/1.3.0/anchor.min.js"></script>
+
   <!-- No highlight on page load -->
   <script type="text/javascript">
     $( document ).ready(function() {
      $("code").addClass("no-highlight");
+    });
+  </script>
+
+  <!-- AnchoJs links next to headers-->
+  <script type="text/javascript">
+    $( document ).ready(function () {
+      anchors.add("h1, h2, h3");
     });
   </script>
 

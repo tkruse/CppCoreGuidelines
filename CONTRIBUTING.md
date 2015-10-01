@@ -1,3 +1,6 @@
+---
+layout: default
+---
 ## Contributing to the C++ Core Guidelines
 
 >"Within C++ is a smaller, simpler, safer language struggling to get out." 

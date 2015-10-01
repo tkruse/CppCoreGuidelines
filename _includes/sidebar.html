@@ -1,36 +1,56 @@
 <div class="sidebar">
   <div class="container sidebar-sticky">
     <div class="sidebar-about">
-      <h1>
+      <h3>
         <a href="{{ site.baseurl }}">
-          {{ site.title }}
+          C++ Core Guidelines
         </a>
-      </h1>
+      </h3>
       <p class="lead">{{ site.description }}</p>
     </div>
 
     <nav class="sidebar-nav">
-      <a class="sidebar-nav-item{% if page.url == site.baseurl %} active{% endif %}" href="{{ site.baseurl }}">Home</a>
+      <small>
+        {% if page.name == "CppCoreGuidelines.md" %}
+      <!-- Items have to be added manually until for now -->
+      <a class="sidebar-nav-item active" href="#main">Top</a>
+      <a class="sidebar-nav-item active" href="#S-philosophy">P: Philosophy</a>
+      <a class="sidebar-nav-item active" href="#S-interfaces">I: Interfaces</a>
+      <a class="sidebar-nav-item active" href="#S-functions">F: Functions</a>
+      <a class="sidebar-nav-item active" href="#S-class">C: Classes and class hierarchies</a>
+      <a class="sidebar-nav-item active" href="#S-enum">Enum: Enumerations</a>
+      <a class="sidebar-nav-item active" href="#S-expr">ES: Expressions and statements</a>
+      <a class="sidebar-nav-item active" href="#S-errors">E: Error handling</a>
+      <a class="sidebar-nav-item active" href="#S-resource">R: Resource management</a>
+      <a class="sidebar-nav-item active" href="#S-templates">T: Templates and generic programming</a>
+      <a class="sidebar-nav-item active" href="#S-concurrency">CP: Concurrency</a>
+      <a class="sidebar-nav-item active" href="#S-stdlib">STL: The Standard library</a>
+      <a class="sidebar-nav-item active" href="#S-source">SF: Source files</a>
+      <a class="sidebar-nav-item active" href="#S-cpl">CPL: C-style programming</a>
+      <a class="sidebar-nav-item active" href="#S-profile">PRO: Profiles</a>
+      <a class="sidebar-nav-item active" href="#S-gsl">GSL: Guideline support library</a>
 
-      {% comment %}
-        The code below dynamically generates a sidebar nav of pages with
-        `layout: page` in the front-matter. See readme for usage.
-      {% endcomment %}
+      <a class="sidebar-nav-item active" href="#S-naming">NL: Naming and layout</a>
+      <a class="sidebar-nav-item active" href="#S-performance">PER: Performance</a>
+      <a class="sidebar-nav-item active" href="#S-not">N: Non-Rules and myths</a>
+      <a class="sidebar-nav-item active" href="#S-references">RF: References</a>
+      <a class="sidebar-nav-item active" href="#S-libraries">Appendix A: Libraries</a>
+      <a class="sidebar-nav-item active" href="#S-modernizing">Appendix B: Modernizing code</a>
+      <a class="sidebar-nav-item active" href="#S-discussion">Appendix C: Discussion</a>
+      <a class="sidebar-nav-item active" href="#S-unclassified">To-do: Unclassified proto-rules</a>
 
-      {% assign pages_list = site.pages %}
-      {% for node in pages_list %}
-        {% if node.title != null %}
-          {% if node.layout == "page" %}
-            <a class="sidebar-nav-item{% if page.url == node.url %} active{% endif %}" href="{{ node.url }}">{{ node.title }}</a>
-          {% endif %}
+        {% else %}
+
+      <a class="sidebar-nav-item active" href="CppCoreGuidelines.html">The actual Guidelines</a>
+      <a class="sidebar-nav-item active" href="index.html">README</a>
+      <a class="sidebar-nav-item active" href="CONTRIBUTING.html">Contributing</a>
+      <a class="sidebar-nav-item active" href="LICENSE">License</a>
         {% endif %}
-      {% endfor %}
 
-      <a class="sidebar-nav-item" href="{{ site.github.repo }}/archive/v{{ site.version }}.zip">Download</a>
-      <a class="sidebar-nav-item" href="{{ site.github.repo }}">GitHub project</a>
-      <span class="sidebar-nav-item">Currently v{{ site.version }}</span>
+      </small>
+
     </nav>
 
-    <p>&copy; {{ site.time | date: '%Y' }}. All rights reserved.</p>
+    <!-- <p>Generated {{ site.time | date: '%Y-%m-%d' }}.</p> -->
   </div>
 </div>

@@ -1,36 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-us">
 
-  <head>
-    <meta charset="UTF-8">
-    <title>Cppcoreguidelines by tkruse</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
+  {% include head.html %}
 
   <body>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-      <header class="inner">
-        <section class="page-header">
-          <h1 class="project-name">Cppcoreguidelines</h1>
-          <h2 class="project-tagline">The C++ Core Guidelines are a set of tried-and-true guidelines, rules, and best practices about coding in C++</h2>
-          <a href="https://github.com/tkruse/CppCoreGuidelines" class="btn">View on GitHub</a>
-          <a href="https://github.com/tkruse/CppCoreGuidelines/zipball/master" class="btn">Download .zip</a>
-          <a href="https://github.com/tkruse/CppCoreGuidelines/tarball/master" class="btn">Download .tar.gz</a>
-        </section>
-      </header>
-    </div>
+    {% include sidebar.html %}
 
-    <section class="main-content">
-
+    <div class="content container">
       {{ content }}
-
-    </section>
+    </div>
 
   </body>
 </html>

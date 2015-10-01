@@ -62,6 +62,26 @@
   background: url(../images/sprite_download.png) no-repeat top right;
 }
 
+/**
+ * Try to display h5 headers left of paragraphs
+ */
+
+h5 {
+    display: inline;
+}
+
+h5:before {
+    content: '\A'; white-space:pre-line;
+}
+
+p {
+    display: inline;
+}
+
+p:after {
+    content: '\A'; white-space:pre-line;
+}
+
 @media print {
     .sidebar,.banner, a:after {
         display: none;

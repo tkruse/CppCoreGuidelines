@@ -61,6 +61,7 @@ html {
 }
 @media (min-width: 48em) {
   .sidebar {
+    overflow-y: scroll;
     position: fixed;
     top: 0;
     left: 0;
@@ -111,6 +112,7 @@ a.sidebar-nav-item:focus {
     right:  1rem;
     bottom: 1rem;
     left:   1rem;
+    top:    1rem;
   }
 }
 

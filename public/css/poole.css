@@ -35,11 +35,6 @@
  * Update the foundational and global aspects of the page.
  */
 
-* {
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-}
 
 html,
 body {
@@ -159,18 +154,32 @@ code {
   background-color: #f9f9f9;
   border-radius: 3px;
 }
+@media (max-width: 70em) {
+  code {
+      white-space: pre-wrap;
+      word-break: break-all;
+      word-wrap: break-word;
+  }
+}
 pre {
   display: block;
   margin-top: 0;
-  margin-bottom: 1rem;
-  padding: 1rem;
   font-size: .8rem;
   line-height: 1.4;
-  white-space: pre;
-  white-space: pre-wrap;
-  word-break: break-all;
-  word-wrap: break-word;
   background-color: #f9f9f9;
+}
+@media (min-width: 70em) {
+  pre {
+    display: inline-block;
+    min-width: 50em;
+    white-space: pre;
+  }
+}
+@media (min-width: 70em) {
+  pre code {
+    display: inline-block;
+    min-width: 50em;
+  }
 }
 pre code {
   padding: 0;

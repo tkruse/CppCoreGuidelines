@@ -1,0 +1,19 @@
+# This is the configuration for Travis CI, a free github-integrated service that runs this script for each pull request (if configured)
+
+# provides gcc, clang, make, scons, cmake
+language: c++
+
+# alternatives: gcc, clang, or both (as yaml list)
+compiler: clang
+
+install:
+
+## Ruby (for Jekyll testing)
+#  - rvm get stable
+#  - rvm reinstall ruby-head --binary
+
+script:
+ - cd scripts; make
+
+notifications:
+  email: false

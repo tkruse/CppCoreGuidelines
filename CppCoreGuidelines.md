@@ -6,6 +6,8 @@ layout: default
 
 August 25, 2016
 
+
+
 Editors:
 
 * [Bjarne Stroustrup](http://www.stroustrup.com)

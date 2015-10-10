@@ -1,5 +1,7 @@
 #[C++ Core Guidelines](http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
 
+[![Build Status](https://travis-ci.org/tkruse/CppCoreGuidelines.svg)](https://travis-ci.org/tkruse/CppCoreGuidelines)
+
 >"Within C++ is a smaller, simpler, safer language struggling to get out."
 >-- <cite>Bjarne Stroustrup</cite>
 

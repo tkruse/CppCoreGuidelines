@@ -4648,7 +4648,9 @@ A class with members that all have default constructors implicitly gets a defaul
         vector<int> v;
     };
 
+    {% raw %}
     X x; // means X{{}, {}}; that is the empty string and the empty vector
+    {% endraw %}
 
 Beware that built-in types are not properly default constructed:
 

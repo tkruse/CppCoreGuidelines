@@ -91,6 +91,7 @@ check-badchars: $(SOURCEPATH) $(BUILD_DIR) Makefile
 	@cat ../$(SOURCEFILE) | nl -ba | perl -ne 'print if /’|‘|”|“|¸| |–|…|¦/' > $(BUILD_DIR)/$(SOURCEFILE).badchars || true
 	@if [ -s $(BUILD_DIR)/CppCoreGuidelines.md.badchars ]; then echo 'Warning: Undesired chars (–’‘“”¸…¦) or Unicode EN SPACE found, use markdown-compatible symbols instead:'; cat $(BUILD_DIR)/CppCoreGuidelines.md.badchars; false; fi;
 
+#### spell checker
 
 .PHONY: hunspell-check
 hunspell-check: $(BUILD_DIR)/plain-nohtml.txt
@@ -105,7 +106,15 @@ hunspell-check: $(BUILD_DIR)/plain-nohtml.txt
 hunspell-list: $(BUILD_DIR)/plain.txt
 	hunspell -p hunspell/isocpp.dic -l < build/plain-nohtml.txt
 
-#### Cpplint
+#### compile checker
+
+.PHONY: compile-all
+compile-all: $(BUILD_DIR)/codeblocks $(BUILD_DIR)/Makefile python/Makefile.in
+	cd $(BUILD_DIR)/codeblocks; $(MAKE) compile-all -k
+
+.PHONY: cppcheck-all
+cppcheck-all: $(BUILD_DIR)/codeblocks $(BUILD_DIR)/Makefile python/Makefile.in
+	cd $(BUILD_DIR)/codeblocks; $(MAKE) cppcheck-all -k
 
 .PHONY: cpplint-all
 cpplint-all: $(BUILD_DIR)/codeblocks $(BUILD_DIR)/Makefile python/Makefile.in

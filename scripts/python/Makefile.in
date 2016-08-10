@@ -10,6 +10,9 @@ cpplint-all
 CXX_SRCS := $(wildcard *.cpp)
 CXX_OBJS := ${CXX_SRCS:.cpp=.o}
 
+# exclusions
+
+
 # TODO: better way to select correct clang name
 CC = clang
 
@@ -27,7 +30,9 @@ check-clang:
 	clang --version || (echo "Error, $(CC) not found" && false)
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c $< -o $@ || (cat $< | nl -ba | grep -v 'md-split' && false)
+	@if ! grep -q $@ "../../python/exclusions"; then  \
+		$(CC) $(CFLAGS) -c $< -o $@ || (cat $< | nl -ba | grep -v 'md-split' && false) \
+  fi;
 
 #### cppcheck
 

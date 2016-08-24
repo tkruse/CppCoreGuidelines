@@ -7727,7 +7727,7 @@ Having the same name for logically different functions is confusing and leads to
 Consider:
 
     void open_gate(Gate& g);   // remove obstacle from garage exit lane
-    void fopen(const char* name, const char* mode);   // open file
+    extern FILE *fopen(const char* name, const char* mode);   // open file
 
 The two operations are fundamentally different (and unrelated) so it is good that their names differ. Conversely:
 

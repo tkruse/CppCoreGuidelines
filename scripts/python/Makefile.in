@@ -16,7 +16,7 @@ CXX_OBJS := ${CXX_SRCS:.cpp=.o}
 # TODO: better way to select correct clang name
 CC = clang
 
-CFLAGS  = -g -std=c++1y -stdlib=libc++
+CFLAGS = -g -std=c++1y -stdlib=libc++ --analyze -I ../../c++/gsl
 
 ## Not sure about Wall, since some code intentionally would generate warnings, while other code should not... Needs more thinking.
 # -Wall
@@ -31,6 +31,7 @@ check-clang:
 
 %.o: %.cpp
 	@if ! grep -q $@ "../../python/exclusions"; then  \
+    echo '$(CC) $(CFLAGS) -c $< -o $@ || (cat $< | nl -ba | grep -v 'md-split' && false)'; \
 		$(CC) $(CFLAGS) -c $< -o $@ || (cat $< | nl -ba | grep -v 'md-split' && false) \
   fi;
 

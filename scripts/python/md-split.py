@@ -106,8 +106,10 @@ def process_code(read_filehandle, text_filehandle, line, linenum, sourcefile, co
             has_actual_code = True
 
         if (not line.strip() == '```'):
+            no_comment_line = no_comment_line.strip()
             if ('???' == no_comment_line or '...' == no_comment_line):
-                has_question_marks = True
+                # has_question_marks = True
+                line = '// by md-split :' + line
             linebuffer.append(dedent(line, indent_depth) if not fenced else line)
         try:
             line = read_filehandle.next()
@@ -143,21 +145,47 @@ def write_with_harness(codefile, sourcefile, start_linenum, linebuffer):
     # add commonly used headers, so that lines can likely compile.
     # This is work in progress, the main issue remains handling class
     # declarations in in-function code differently
+    # TODO: Define types Point, Color, Circle, Shape, Triangle, Iter, X, T
+    # add commonly used headers, so that lines can compile
     with io.open(codefile, 'w') as code_filehandle:
         code_filehandle.write('''\
 #include<stdio.h>      // by md-split
+#include<cstdio>       // by md-split
 #include<stdlib.h>     // by md-split
+#include<cstdlib>      // by md-split
 #include<tuple>        // by md-split
 #include<utility>      // by md-split
 #include<limits>       // by md-split
 #include<functional>   // by md-split
+#include<cmath>        // by md-split
 #include<string>       // by md-split
+#include<chrono>       // by md-split
+#include<thread>       // by md-split
 #include<map>          // by md-split
 #include<iostream>     // by md-split
+#include<fstream>      // by md-split
 #include<vector>       // by md-split
+#include<list>         // by md-split
+#include<future>       // by md-split
 #include<algorithm>    // by md-split
 #include<memory>       // by md-split
+#include <gsl/gsl>     // by md-split
+struct Bar{Bar(){}; Bar(int x){};};          // by md-split
+void error(std::string s){};// by md-split
+void do_something(){};   // by md-split
+void increment2(int* x){};     // by md-split
+template<class T> void use(T x){};   // by md-split
+template<class T> void store_somewhere(T x){};   // by md-split
+template<class T, class T2> void use(T x, T2 y){};   // by md-split
+int* get_hardware_memory_location() {return 0;}; // by md-split
+int COUNT, MAX, SIZE = 100;  // by md-split
+bool something, cannot_release_a_resource = false;  // by md-split
+class Message {};      // by md-split
+class Gate {};         // by md-split
+class My_vector {};    // by md-split
+class Get_me_out_of_here {}; // by md-split
 using namespace std;   // by md-split
+using namespace gsl;   // by md-split
 // %s : %s
 ''' % (sourcefile, start_linenum))
         # TODO: if not toplevel code, wrap inside class

@@ -2659,7 +2659,7 @@ Passing a shared smart pointer (e.g., `std::shared_ptr`) implies a run-time cost
 ##### Example, bad
 
     // callee
-    void f(shared_ptr<widget>& w)
+    void f(shared_ptr<Bar>& w)
     {
         // ...
         use(*w); // only use of w -- the lifetime is not used at all
@@ -3739,21 +3739,25 @@ Pointers and references to locals shouldn't outlive their scope. Lambdas that ca
 
 ##### Example, bad
 
-    int local = 42;
+    void test() {
+        int local = 42;
 
-    // Want a reference to local.
-    // Note, that after program exits this scope,
-    // local no longer exists, therefore
-    // process() call will have undefined behavior!
-    thread_pool.queue_work([&]{ process(local); });
+        // Want a reference to local.
+        // Note, that after program exits this scope,
+        // local no longer exists, therefore
+        // process() call will have undefined behavior!
+        thread_pool.queue_work([&]{ process(local); });
+    }
 
 ##### Example, good
 
-    int local = 42;
-    // Want a copy of local.
-    // Since a copy of local is made, it will
-    // always be available for the call.
-    thread_pool.queue_work([=]{ process(local); });
+    void test() {
+        int local = 42;
+        // Want a copy of local.
+        // Since a copy of local is made, it will
+        // always be available for the call.
+        thread_pool.queue_work([=]{ process(local); });
+    }
 
 ##### Enforcement
 
@@ -4286,7 +4290,7 @@ Regular types are easier to understand and reason about than types that are not 
 
     struct Bundle {
         string name;
-        vector<Record> vr;
+        vector<int> vr;
     };
 
     bool operator==(const Bundle& a, const Bundle& b)
@@ -4294,11 +4298,14 @@ Regular types are easier to understand and reason about than types that are not 
         return a.name == b.name && a.vr == b.vr;
     }
 
-    Bundle b1 { "my bundle", {r1, r2, r3}};
-    Bundle b2 = b1;
-    if (!(b1 == b2)) error("impossible!");
-    b2.name = "the other bundle";
-    if (b1 == b2) error("No!");
+    void test()
+    {
+        Bundle b1 { "my bundle", {1, 2, 3}};
+        Bundle b2 = b1;
+        if (!(b1 == b2)) error("impossible!");
+        b2.name = "the other bundle";
+        if (b1 == b2) error("No!");
+    }
 
 In particular, if a concrete type has an assignment also give it an equals operator so that `a = b` implies `a == b`.
 
@@ -5598,12 +5605,14 @@ It is simple and efficient. If you want to optimize for rvalues, provide an over
         // ...
     };
 
-    Foo a;
-    Foo b;
-    Foo f();
+    void test() {
+        Foo a;
+        Foo b;
+        Foo f();
 
-    a = b;    // assign lvalue: copy
-    a = f();  // assign rvalue: potentially move
+        a = b;    // assign lvalue: copy
+        a = f();  // assign rvalue: potentially move
+    }
 
 ##### Note
 
@@ -7259,11 +7268,13 @@ That can cause confusion: An overrider does not inherit default arguments.
         int multiply(int value, int factor = 10) override;
     };
 
-    Derived d;
-    Base& b = d;
+    void test() {
+        Derived d;
+        Base& b = d;
 
-    b.multiply(10);  // these two calls will call the same function but
-    d.multiply(10);  // with different arguments and so different results
+        b.multiply(10);  // these two calls will call the same function but
+        d.multiply(10);  // with different arguments and so different results
+    }
 
 ##### Enforcement
 
@@ -7531,27 +7542,27 @@ It also ensures exception safety in complex expressions.
 
 ##### Example
 
-    unique_ptr<Foo> p {new<Foo>{7}};   // OK: but repetitive
+    unique_ptr<Bar> p {new<Bar>{7}};   // OK: but repetitive
 
-    auto q = make_unique<Foo>(7);      // Better: no repetition of Foo
+    auto q = make_unique<Bar>(7);      // Better: no repetition of Bar
 
     // Not exception-safe: the compiler may interleave the computations of arguments as follows:
     //
-    // 1. allocate memory for Foo,
-    // 2. construct Foo,
+    // 1. allocate memory for Bar,
+    // 2. construct Bar,
     // 3. call bar,
-    // 4. construct unique_ptr<Foo>.
+    // 4. construct unique_ptr<Bar>.
     //
-    // If bar throws, Foo will not be destroyed, and the memory allocated for it will leak.
-    f(unique_ptr<Foo>(new Foo()), bar());
+    // If bar throws, Bar will not be destroyed, and the memory allocated for it will leak.
+    use(unique_ptr<Bar>(new Bar()), do_something());
 
     // Exception-safe: calls to functions are never interleaved.
-    f(make_unique<Foo>(), bar());
+    use(make_unique<Bar>(), do_something());
 
 ##### Enforcement
 
-* Flag the repetitive usage of template specialization list `<Foo>`
-* Flag variables declared to be `unique_ptr<Foo>`
+* Flag the repetitive usage of template specialization list `<Bar>`
+* Flag variables declared to be `unique_ptr<Bar>`
 
 ### <a name="Rh-make_shared"></a>C.151: Use `make_shared()` to construct objects owned by `shared_ptr`s
 
@@ -7562,15 +7573,16 @@ It also gives an opportunity to eliminate a separate allocation for the referenc
 
 ##### Example
 
-    // OK: but repetitive; and separate allocations for the Foo and shared_ptr's use count
-    shared_ptr<Foo> p {new<Foo>{7}};
+    void test() {
+    // OK: but repetitive; and separate allocations for the Bar and shared_ptr's use count
+    shared_ptr<Bar> p {new<Bar>{7}};
 
-    auto q = make_shared<Foo>(7);   // Better: no repetition of Foo; one object
+    auto q = make_shared<Bar>(7);   // Better: no repetition of Bar; one object
 
 ##### Enforcement
 
-* Flag the repetitive usage of template specialization list`<Foo>`
-* Flag variables declared to be `shared_ptr<Foo>`
+* Flag the repetitive usage of template specialization list`<Bar>`
+* Flag variables declared to be `shared_ptr<Bar>`
 
 ### <a name="Rh-array"></a>C.152: Never assign a pointer to an array of derived class objects to a pointer to its base
 
@@ -13522,7 +13534,7 @@ If you don't know what a piece of code does, you are risking deadlock.
 
 ##### Example
 
-    void do_this(Foo* p)
+    void do_this(Bar* p)
     {
         lock_guard<mutex> lck {my_mutex};
         // ... do something ...
@@ -13530,7 +13542,7 @@ If you don't know what a piece of code does, you are risking deadlock.
         // ...
     }
 
-If you don't know what `Foo::act` does (maybe it is a virtual function invoking a derived class member of a class not yet written),
+If you don't know what `Bar::act` does (maybe it is a virtual function invoking a derived class member of a class not yet written),
 it may call `do_this` (recursively) and cause a deadlock on `my_mutex`.
 Maybe it will lock on a different mutex and not return in a reasonable time, causing delays to any code calling `do_this`.
 
@@ -14927,17 +14939,23 @@ To prevent slicing.
 
 ##### Example
 
-    void f()
-    try {
-        // ...
-    }
-    catch (exception e) {   // don't: may slice
-        // ...
+    void f() {
+        try {
+            // ...
+        }
+        catch (exception e) {   // don't: may slice
+            // ...
+        }
     }
 
 Instead, use a reference:
 
-    catch (exception& e) { /* ... */ }
+    void f() {
+        try {
+            // ...
+        }
+        catch (exception& e) { /* ... */ }
+    }
 
 of - typically better still - a `const` reference:
 
@@ -15471,9 +15489,14 @@ Prevents accidental or hard-to-notice change of value.
 
 ##### Example
 
-    for (const int i : c) cout << i << '\n';    // just reading: const
+    void test(vector<string> c)
+    {
+       for (const int i : c) cout << i << '\n';    // just reading: const
 
-    for (int i : c) cout << i << '\n';          // BAD: just reading
+        for (int i : c) cout << i << '\n';          // BAD: just reading
+
+        for (string& s : c) cin >> s;  // needs to write: non-const
+    }
 
 ##### Exception
 
@@ -17635,8 +17658,8 @@ That makes the code concise and gives better locality than alternatives.
 
 ##### Example
 
-    auto earlyUsersEnd = std::remove_if(users.begin(), users.end(),
-                                        [](const User &a) { return a.id > 100; });
+    auto early_users_end = std::remove_if(bars.begin(), bars.end(),
+                                          [](const Bar &a) { return a.id > 100; });
 
 
 ##### Exception

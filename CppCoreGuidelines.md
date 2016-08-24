@@ -2068,7 +2068,7 @@ Define a `struct` as the parameter type and name the fields for those parameters
     struct SystemParams {
         string config_file;
         string output_path;
-        seconds timeout;
+        chrono::seconds timeout;
     };
     void initialize(SystemParams p);
 

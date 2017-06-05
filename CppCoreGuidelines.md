@@ -4177,7 +4177,7 @@ For example, a derived class might be allowed to skip a run-time check because i
 
     class Foo {
     public:
-        int bar(int x) { check(x); return do_bar(); }
+        int bar(int x) { check(x); return do_bar(x); }
         // ...
     protected:
         int do_bar(int x); // do some operation on the data
@@ -4193,7 +4193,7 @@ For example, a derived class might be allowed to skip a run-time check because i
             /* ... do something ... */
             return do_bar(x + y); // OK: derived class can bypass check
         }
-    }
+    };
 
     void user(Foo& x)
     {
@@ -7086,7 +7086,7 @@ If the operations are virtual the use of inheritance is necessary, if not using 
 
 ##### Example
 
-      class iostream : public istream, public ostream {   // very simplified
+    class iostream : public istream, public ostream {   // very simplified
         // ...
     };
 
@@ -11320,7 +11320,7 @@ Use a `span`:
 
     void f2(array<int, 10> arr, int pos) // A2: Add local span and use that
     {
-        span<int> a = {arr, pos}
+        span<int> a = {arr, pos};
         a[pos / 2] = 1; // OK
         a[pos - 1] = 2; // OK
     }
@@ -12171,7 +12171,7 @@ When unambiguous, the `T` can be left out of `T{e}`.
 
     complex<double> f(complex<double>);
 
-    auto z = f({2*pi, 1});
+    auto z = f({2 * pi, 1});
 
 ##### Note
 
@@ -12198,7 +12198,7 @@ The conventional resolution is to interpret `{10}` as a list of one element and 
 This mistake need not be repeated in new code.
 We can define a type to represent the number of elements:
 
-    struct Count { int n };
+    struct Count { int n; };
 
     template<typename T>
     class Vector {
@@ -12620,7 +12620,7 @@ For example
         operator int() { return val; }
     };
 
-    int f(Positive arg) {return arg };
+    int f(Positive arg) {return arg; }
 
     int r1 = f(2);
     int r2 = f(-2);  // throws
@@ -15553,7 +15553,7 @@ You can
 Example:
 
     void f(int* p);   // old code: f() does not modify `*p`
-    void f(const int* p) { f(const_cast<int*>(p); } // wrapper
+    void f(const int* p) { f(const_cast<int*>(p)); } // wrapper
 
 Note that this wrapper solution is a patch that should be used only when the declaration of `f()` cannot be be modified,
 e.g. because it is in a library that you cannot modify.
@@ -16257,7 +16257,7 @@ It is a general design rule that even applies to non-templates:
 
     void f(const Minimal& x, const Minimal& y)
     {
-        if (!(x == y) { /* ... */ }     // OK
+        if (!(x == y)) { /* ... */ }     // OK
         if (x != y) { /* ... */ }       // surprise! error
 
         while (!(x < y)) { /* ... */ }  // OK
@@ -16287,7 +16287,7 @@ The rule supports the view that a concept should reflect a (mathematically) cohe
 
     void f(const Convenient& x, const Convenient& y)
     {
-        if (!(x == y) { /* ... */ }     // OK
+        if (!(x == y)) { /* ... */ }     // OK
         if (x != y) { /* ... */ }       // OK
 
         while (!(x < y)) { /* ... */ }  // OK
@@ -18651,7 +18651,7 @@ Don't use C-style strings for operations that require non-trivial memory managem
         p[l1] = '.';
         strcpy(p + l1 + 1, s2, l2);
         p[l1 + l2 + 1] = 0;
-        return res;
+        return p;
     }
 
 Did we get that right?
@@ -19317,7 +19317,7 @@ This technique is a pre-exception technique for RAII-like resource and error han
         // ...
         int* p = (int*) malloc(n);
         // ...
-        if (some_ error) goto_exit;
+        if (some_error) goto_exit;
         // ...
     exit:
         free(p);

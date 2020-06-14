@@ -312,9 +312,9 @@ We value expressiveness and uncompromised performance.
 
 The rules are not value-neutral.
 They are meant to make code simpler and more correct/safer than most existing C++ code, without loss of performance.
-They are meant to inhibit perfectly valid C++ code that correlates with errors, spurious complexity, and poor performance.
+They are meant to inhibit perfectly valid C++ code that correlates with errors, spurious complexity, and bad performance.
 
-The rules are not precise to the point where a person (or machine) can follow them blindly.
+The rules are not precise to the point where a person (or machine) can follow them without thinking.
 The enforcement parts try to be that, but we would rather leave a rule or a definition a bit vague
 and open to interpretation than specify something precisely and wrong.
 Sometimes, precision comes only with time and experience.
@@ -332,7 +332,7 @@ Also, suggest an improvement.
 ## <a name="SS-force"></a>In.force: Enforcement
 
 Rules with no enforcement are unmanageable for large code bases.
-Enforcement of all rules is possible only for a small weak set of rules or for a specific user community.
+Enforcement of all rules is possible only for a small set of rules or for a specific user community.
 
 * But we want lots of rules, and we want rules that everybody can use.
 * But different people have different needs.
@@ -352,7 +352,7 @@ We try to resolve those using tools.
 Each rule has an **Enforcement** section listing ideas for enforcement.
 Enforcement might be done by code review, by static analysis, by compiler, or by run-time checks.
 Wherever possible, we prefer "mechanical" checking (humans are slow, inaccurate, and bore easily) and static checking.
-Run-time checks are suggested only rarely where no alternative exists; we do not want to introduce "distributed fat".
+Run-time checks are suggested only rarely where no alternative exists; we do not want to introduce "distributed bloat".
 Where appropriate, we label a rule (in the **Enforcement** sections) with the name of groups of related rules (called "profiles").
 A rule can be part of several profiles, or none.
 For a start, we have a few profiles corresponding to common needs (desires, ideals):
@@ -1959,7 +1959,7 @@ Consider using explicit spans:
 
 Consider:
 
-    void draw(Shape* p, int n);  // poor interface; poor code
+    void draw(Shape* p, int n);  // bad interface; bad code
     Circle arr[10];
     // ...
     draw(arr, 10);
@@ -2258,7 +2258,7 @@ See [GOTW #100](https://herbsutter.com/gotw/_100/) and [cppreference](http://en.
 ##### Reason
 
 To keep code simple and safe.
-Sometimes, ugly, unsafe, or error-prone techniques are necessary for logical or performance reasons.
+Sometimes, verbose, unsafe, or error-prone techniques are necessary for logical or performance reasons.
 If so, keep them local, rather than "infecting" interfaces so that larger groups of programmers have to be aware of the
 subtleties.
 Implementation complexity should, if at all possible, not leak through interfaces into user code.
@@ -2376,7 +2376,7 @@ Other function rules:
 * [F.54: If you capture `this`, capture all variables explicitly (no default capture)](#Rf-this-capture)
 * [F.55: Don't use `va_arg` arguments](#F-varargs)
 
-Functions have strong similarities to lambdas and function objects.
+Functions have a lot of similarities to lambdas and function objects.
 
 **See also**: [C.lambdas: Function objects and lambdas](#SS-lambdas)
 
@@ -2416,7 +2416,7 @@ If you write a non-trivial lambda that potentially can be used in more than one 
 
     sort(a, b, [](T x, T y) { return x.rank() < y.rank() && x.value() < y.value(); });
 
-Naming that lambda breaks up the expression into its logical parts and provides a strong hint to the meaning of the lambda.
+Naming that lambda breaks up the expression into its logical parts and provides a useful hint to the meaning of the lambda.
 
     auto lessT = [](T x, T y) { return x.rank() < y.rank() && x.value() < y.value(); };
 
@@ -4724,7 +4724,7 @@ These operations disagree about copy semantics. This will lead to confusion and 
 
 ## <a name="SS-dtor"></a>C.dtor: Destructors
 
-"Does this class need a destructor?" is a surprisingly powerful design question.
+"Does this class need a destructor?" is a surprisingly revealing design question.
 For most classes the answer is "no" either because the class holds no resources or because destruction is handled by [the rule of zero](#Rc-zero);
 that is, its members can take care of themselves as concerns destruction.
 If the answer is "yes", much of the design of the class follows (see [the rule of five](#Rc-five)).
@@ -5561,7 +5561,7 @@ Makes it explicit that the same value is expected to be used in all constructors
         // ...
     };
 
-How would a maintainer know whether `j` was deliberately uninitialized (probably a poor idea anyway) and whether it was intentional to give `s` the default value `""` in one case and `qqq` in another (almost certainly a bug)? The problem with `j` (forgetting to initialize a member) often happens when a new member is added to an existing class.
+How would a maintainer know whether `j` was deliberately uninitialized (probably a bad idea anyway) and whether it was intentional to give `s` the default value `""` in one case and `qqq` in another (almost certainly a bug)? The problem with `j` (forgetting to initialize a member) often happens when a new member is added to an existing class.
 
 ##### Example
 
@@ -5616,7 +5616,7 @@ An initialization explicitly states that initialization, rather than assignment,
         // ...
     };
 
-    class C {   // UGLY, aka very bad
+    class C {   // VERY BAD
         int* p;
     public:
         C() { cout << *p; p = new int{10}; }   // accidental use before initialized
@@ -6065,7 +6065,7 @@ Always leave the moved-from object in some (necessarily specified) valid state.
 
 ##### Note
 
-Unless there is an exceptionally strong reason not to, make `x = std::move(y); y = z;` work with the conventional semantics.
+Unless there is an exceptionally good reason not to, make `x = std::move(y); y = z;` work with the conventional semantics.
 
 ##### Enforcement
 
@@ -6383,7 +6383,7 @@ However, experience shows that such calls are rarely needed, easily confuse main
 
 ##### Reason
 
-A `swap` can be handy for implementing a number of idioms, from smoothly moving objects around to implementing assignment easily to providing a guaranteed commit function that enables strongly error-safe calling code. Consider using swap to implement copy assignment in terms of copy construction. See also [destructors, deallocation, and swap must never fail](#Re-never-fail).
+A `swap` can be handy for implementing a number of idioms, from smoothly moving objects around to implementing assignment easily to providing a guaranteed commit function that enables very error-safe calling code. Consider using swap to implement copy assignment in terms of copy construction. See also [destructors, deallocation, and swap must never fail](#Re-never-fail).
 
 ##### Example, good
 
@@ -6710,7 +6710,7 @@ In particular, ensure that an object compares equal to its copy.
     {
         Sorted_vector<string> v2 {v};
         if (v != v2)
-            cout << "insanity rules!\n";
+            cout << "What's happening here?\n";
         // ...
     }
 
@@ -7250,7 +7250,7 @@ To make this interface useful, we must provide its implementation classes (here,
         // ...
     };
 
-Now `Shape` is a poor example of a class with an implementation,
+Now `Shape` is a bad example of a class with an implementation,
 but bear with us because this is just a simple example of a technique aimed at more complex hierarchies.
 
     class Impl::Circle : public virtual ::Circle, public Impl::Shape {   // implementation
@@ -8353,7 +8353,7 @@ By itself, `cout_my_class` would be OK, but it is not usable/composable with cod
 
 ##### Note
 
-There are strong and vigorous conventions for the meaning most operators, such as
+There are strict and vigorous conventions for the meaning most operators, such as
 
 * comparisons (`==`, `!=`, `<`, `<=`, `>`, and `>=`),
 * arithmetic operations (`+`, `-`, `*`, `/`, and `%`)
@@ -8720,7 +8720,7 @@ but at least we can see that something tricky is going on.
 ##### Note
 
 Unfortunately, `union`s are commonly used for type punning.
-We don't consider "sometimes, it works as expected" a strong argument.
+We don't consider "sometimes, it works as expected" a convincing argument.
 
 C++17 introduced a distinct type `std::byte` to facilitate operations on raw object representation.  Use that type instead of `unsigned char` or `char` for these operations.
 
@@ -8871,7 +8871,7 @@ Convenience of use and avoidance of errors.
     Day today = Day::sat;
     Day tomorrow = ++today;
 
-The use of a `static_cast` is not pretty, but
+The use of a `static_cast` is verbose, but
 
     Day& operator++(Day& d)
     {
@@ -10254,7 +10254,7 @@ Such names are commonly used for macros. Thus, `ALL_CAPS` name are vulnerable to
     // somewhere else in some other header:
     enum Coord { N, NE, NW, S, SE, SW, E, W };
 
-    // somewhere third in some poor programmer's .cpp:
+    // somewhere third in some bad programmer's .cpp:
     switch (direction) {
     case N:
         // ...
@@ -10498,7 +10498,7 @@ No, `i = 7` does not initialize `i`; it assigns to it. Also, `i` can be read in 
 
 ##### Note
 
-The *always initialize* rule is deliberately stronger than the *an object must be set before used* language rule.
+The *always initialize* rule deliberately takes priority over the *an object must be set before used* language rule.
 The latter, more relaxed rule, catches the technical bugs, but:
 
 * It leads to less readable code
@@ -10688,7 +10688,7 @@ Readability. Limit the scope in which a variable can be used. Don't risk used-be
 
 ##### Example, bad
 
-    SomeLargeType var;   // ugly CaMeLcAsEvArIaBlE
+    SomeLargeType var;   // Hard-to-read CaMeLcAsEvArIaBlE
 
     if (cond)   // some non-trivial condition
         Set(&var);
@@ -11022,7 +11022,7 @@ Also, `#` and `##` encourages the definition and use of macros:
 
     void f(int x, int y)
     {
-        string CAT(x, y) = "asdf";   // BAD: hard for tools to handle (and ugly)
+        string CAT(x, y) = "asdf";   // BAD: hard for tools to handle (and verbose)
         string sx2 = STRINGIFY(x);
         // ...
     }
@@ -11906,7 +11906,7 @@ To do this we still need to mutate `cache`, so people sometimes resort to a `con
             auto p = cache.find(x);
             if (p.first) return p.second;
             int val = compute(x);
-            const_cast<Cache&>(cache).set(x, val);   // ugly
+            const_cast<Cache&>(cache).set(x, val);   // verbose
             return val;
         }
         // ...
@@ -13443,7 +13443,7 @@ Alternatives for users
 This section contains rules for people who need high performance or low-latency.
 That is, these are rules that relate to how to use as little time and as few resources as possible to achieve a task in a predictably short time.
 The rules in this section are more restrictive and intrusive than what is needed for many (most) applications.
-Do not blindly try to follow them in general code: achieving the goals of low latency requires extra work.
+Do not try to unthinkingly follow them in general code: achieving the goals of low latency requires extra work.
 
 Performance rule summary:
 
@@ -14084,7 +14084,7 @@ this can be a security risk.
 
 Some is possible, do at least something.
 There are commercial and open-source tools that try to address this problem,
-but be aware that solutions have costs and blind spots.
+but be aware that solutions have costs and may miss issues.
 Static tools often have many false positives and run-time tools often have a significant cost.
 We hope for better tools.
 Using multiple tools can catch more problems than a single one.
@@ -15168,7 +15168,7 @@ Testing - often to an extreme extent - is essential.
 
 ##### Enforcement
 
-Have strong rules for re-testing in place that covers any change in hardware, operating system, compiler, and libraries.
+Have strict rules for re-testing in place that covers any change in hardware, operating system, compiler, and libraries.
 
 
 ### <a name="Rconc-literature"></a>CP.102: Carefully study the literature
@@ -15335,7 +15335,7 @@ Sometimes C++ code allocates the `volatile` memory and shares it with "elsewhere
 ##### Example, bad
 
 `volatile` local variables are nearly always wrong -- how can they be shared with other languages or hardware if they're ephemeral?
-The same applies almost as strongly to member variables, for the same reason.
+The same applies almost as strictly to member variables, for the same reason.
 
     void f()
     {
@@ -15637,7 +15637,7 @@ We know of only a few good reasons:
 * We are in a hard-real-time system and we don't have tools that guarantee us that an exception is handled within the required time.
 * We are in a system with tons of legacy code using lots of pointers in difficult-to-understand ways
   (in particular without a recognizable ownership strategy) so that exceptions could cause leaks.
-* Our implementation of the C++ exception mechanisms is unreasonably poor
+* Our implementation of the C++ exception mechanisms is unreasonably bad
 (slow, memory consuming, failing to work correctly for dynamically linked libraries, etc.).
 Complain to your implementation purveyor; if no user complains, no improvement will happen.
 * We get fired if we challenge our manager's ancient wisdom.
@@ -16605,7 +16605,7 @@ Template use rule summary:
 * [T.2: Use templates to express algorithms that apply to many argument types](#Rt-algo)
 * [T.3: Use templates to express containers and ranges](#Rt-cont)
 * [T.4: Use templates to express syntax tree manipulation](#Rt-expr)
-* [T.5: Combine generic and OO techniques to amplify their strengths, not their costs](#Rt-generic-oo)
+* [T.5: Combine generic and OO techniques to amplify their benefits, not their costs](#Rt-generic-oo)
 
 Concept use rule summary:
 
@@ -16842,7 +16842,7 @@ See [Stable base](#Rt-abi).
 
 **Exceptions**: ???
 
-### <a name="Rt-generic-oo"></a>T.5: Combine generic and OO techniques to amplify their strengths, not their costs
+### <a name="Rt-generic-oo"></a>T.5: Combine generic and OO techniques to amplify their benefits, not their costs
 
 ##### Reason
 
@@ -17013,7 +17013,7 @@ Hard.
 
 ##### Reason
 
- `auto` is the weakest concept. Concept names convey more meaning than just `auto`.
+ `auto` is the concept which conveys least meaning. Concept names convey more meaning than just `auto`.
 
 ##### Example (using TS concepts)
 
@@ -17448,7 +17448,7 @@ By "meaningless" we mean that we cannot specify the semantics of `has_equal` in 
 
 ## <a name="SS-temp-interface"></a>Template interfaces
 
-Over the years, programming with templates have suffered from a weak distinction between the interface of a template
+Over the years, programming with templates have suffered from an unclear distinction between the interface of a template
 and its implementation.
 Before concepts, that distinction had no direct language support.
 However, the interface to a template is a critical concept - a contract between a user and an implementer - and should be carefully designed.
@@ -18159,7 +18159,7 @@ Templating a class hierarchy that has many functions, especially many virtual fu
     Vector<int> vi;
     Vector<string> vs;
 
-It is probably a dumb idea to define a `sort` as a member function of a container, but it is not unheard of and it makes a good example of what not to do.
+It is probably a bad idea to define a `sort` as a member function of a container, but it is not unheard of and it makes a good example of what not to do.
 
 Given this, the compiler cannot know if `vector<int>::sort()` is called, so it must generate code for it.
 Similar for `vector<string>::sort()`.
@@ -18382,7 +18382,7 @@ Templates provide a general mechanism for compile-time programming.
 
 Metaprogramming is programming where at least one input or one result is a type.
 Templates offer Turing-complete (modulo memory capacity) duck typing at compile time.
-The syntax and techniques needed are pretty horrendous.
+The syntax and techniques needed are horrible.
 
 ### <a name="Rt-metameta"></a>T.120: Use template metaprogramming only when you really need to
 
@@ -20140,7 +20140,7 @@ However, in the context of the styles of programming we recommend and support wi
 
 Even today, there can be contexts where the rules make sense.
 For example, lack of suitable tool support can make exceptions unsuitable in hard-real-time systems,
-but please don't blindly trust "common wisdom" (e.g., unsupported statements about "efficiency");
+but please don't unthinkingly trust "common wisdom" (e.g., unsupported statements about "efficiency");
 such "wisdom" may be based on decades-old information or experienced from languages with very different properties than C++
 (e.g., C or Java).
 
@@ -20279,7 +20279,7 @@ There seem to be four main reasons given for not using exceptions:
 There is no way we can settle this issue to the satisfaction of everybody.
 After all, the discussions about exceptions have been going on for 40+ years.
 Some languages cannot be used without exceptions, but others do not support them.
-This leads to strong traditions for the use and non-use of exceptions, and to heated debates.
+This leads to established traditions for the use and non-use of exceptions, and to heated debates.
 
 However, we can briefly outline why we consider exceptions the best alternative for general-purpose programming
 and in the context of these guidelines.
@@ -20294,7 +20294,7 @@ Compared to what?
 When comparing make sure that the same set of errors are handled and that they are handled equivalently.
 In particular, do not compare a program that immediately terminate on seeing an error with a program
 that carefully cleans up resources before logging an error.
-Yes, some systems have poor exception handling implementations; sometimes, such implementations force us to use
+Yes, some systems have impractical exception handling implementations; sometimes, such implementations force us to use
 other error-handling approaches, but that's not a fundamental problem with exceptions.
 When using an efficiency argument - in any context - be careful that you have good data that actually provides
 insight into the problem under discussion.
@@ -20358,7 +20358,7 @@ Individual classes are rarely a good logical unit of maintenance and distributio
 
 ##### Reason
 
-Splitting initialization into two leads to weaker invariants,
+Splitting initialization into two leads to less invariants,
 more complicated code (having to deal with semi-constructed objects),
 and errors (when we didn't deal correctly with semi-constructed objects consistently).
 
@@ -21018,7 +21018,7 @@ However, we have had many requests for a set of naming and layout conventions to
 
 More specific and detailed rules are easier to enforce.
 
-These rules bear a strong resemblance to the recommendations in the [PPP Style Guide](http://www.stroustrup.com/Programming/PPP-style.pdf)
+These rules bear a big resemblance to the recommendations in the [PPP Style Guide](http://www.stroustrup.com/Programming/PPP-style.pdf)
 written in support of Stroustrup's [Programming: Principles and Practice using C++](http://www.stroustrup.com/programming.html).
 
 ### <a name="Rl-comments"></a>NL.1: Don't say in comments what can be clearly stated in code
@@ -21743,7 +21743,7 @@ Often, messy old code runs unnecessarily slowly because it requires outdated com
 In many cases, automated "modernizer"-style tool support would be required for major upgrade efforts.
 
 The purpose of modernizing code is to simplify adding new functionality, to ease maintenance, and to increase performance (throughput or latency), and to better utilize modern hardware.
-Making code "look pretty" or "follow modern style" are not by themselves reasons for change.
+Making code "look better" or "follow modern style" are not by themselves reasons for change.
 There are risks implied by every change and costs (including the cost of lost opportunities) implied by having an outdated code base.
 The cost reductions must outweigh the risks.
 
@@ -21978,7 +21978,7 @@ Never allow an error to be reported from a destructor, a resource deallocation f
 
     Here, copying `s` could throw, and if that throws and if `n`'s destructor then also throws, the program will exit via `std::terminate` because two exceptions can't be propagated simultaneously.
 
-2. Classes with `Nefarious` members or bases are also hard to use safely, because their destructors must invoke `Nefarious`' destructor, and are similarly poisoned by its poor behavior:
+2. Classes with `Nefarious` members or bases are also hard to use safely, because their destructors must invoke `Nefarious`' destructor, and are similarly impacted by its unconventional behavior:
 
 
         class Innocent_bystander {
@@ -22133,7 +22133,7 @@ In a class holding a reference, you likely need to write the copy constructor an
 
 Resource management rule summary:
 
-* [Provide strong resource safety; that is, never leak anything that you think of as a resource](#Cr-safety)
+* [Provide high resource safety; that is, never leak anything that you think of as a resource](#Cr-safety)
 * [Never throw while holding a resource not owned by a handle](#Cr-never)
 * [A "raw" pointer or reference is never a resource handle](#Cr-raw)
 * [Never let a pointer outlive the object it points to](#Cr-outlive)
@@ -22142,7 +22142,7 @@ Resource management rule summary:
 * [If a class is a resource handle, it needs a constructor, a destructor, and copy and/or move operations](#Cr-handle)
 * [If a class is a container, give it an initializer-list constructor](#Cr-list)
 
-### <a name="Cr-safety"></a>Discussion: Provide strong resource safety; that is, never leak anything that you think of as a resource
+### <a name="Cr-safety"></a>Discussion: Provide high resource safety; that is, never leak anything that you think of as a resource
 
 ##### Reason
 
@@ -22524,7 +22524,7 @@ Alternatively, we will decide that no change is needed and delete the entry.
 * Never pass a pointer down the call stack
 * falling through a function bottom
 * Should there be guidelines to choose between polymorphisms? YES. classic (virtual functions, reference semantics) vs. Sean Parent style (value semantics, type-erased, kind of like `std::function`)  vs. CRTP/static? YES Perhaps even vs. tag dispatch?
-* should virtual calls be banned from ctors/dtors in your guidelines? YES. A lot of people ban them, even though I think it's a big strength of C++ that they are ??? -preserving (D disappointed me so much when it went the Java way). WHAT WOULD BE A GOOD EXAMPLE?
+* should virtual calls be banned from ctors/dtors in your guidelines? YES. A lot of people ban them, even though I think it's an important virtue of C++ that they are ??? -preserving (D disappointed me so much when it went the Java way). WHAT WOULD BE A GOOD EXAMPLE?
 * Speaking of lambdas, what would weigh in on the decision between lambdas and (local?) classes in algorithm calls and other callback scenarios?
 * And speaking of `std::bind`, Stephen T. Lavavej criticizes it so much I'm starting to wonder if it is indeed going to fade away in future. Should lambdas be recommended instead?
 * What to do with leaks out of temporaries? : `p = (s1 + s2).c_str();`

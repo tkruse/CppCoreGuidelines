@@ -5067,7 +5067,7 @@ A destructor (either user-defined or compiler-generated) is implicitly declared 
 
 ##### Example
 
-Not all destructors are noexcept by default; one throwing member poisons the whole class hierarchy
+Not all destructors are noexcept by default; one throwing member affects the whole class hierarchy
 
     struct X {
         Details x;  // happens to have a throwing destructor
@@ -18130,7 +18130,7 @@ this can cause problems like [unintentionally invoking unconstrained function te
 
 ## <a name="SS-temp-hier"></a>T.temp-hier: Template and hierarchy rules:
 
-Templates are the backbone of C++'s support for generic programming and class hierarchies the backbone of its support
+Templates are the main element of C++'s support for generic programming and class hierarchies the main element of its support
 for object-oriented programming.
 The two language mechanisms can be used effectively in combination, but a few design pitfalls must be avoided.
 
@@ -21972,7 +21972,7 @@ Never allow an error to be reported from a destructor, a resource deallocation f
 
         void test(string& s)
         {
-            Nefarious n;          // trouble brewing
+            Nefarious n;          // trouble waiting to happen
             string copy = s;      // copy the string
         } // destroy copy and then n
 
@@ -21982,13 +21982,13 @@ Never allow an error to be reported from a destructor, a resource deallocation f
 
 
         class Innocent_bystander {
-            Nefarious member;     // oops, poisons the enclosing class's destructor
+            Nefarious member;     // oops, affects the enclosing class's destructor
             // ...
         };
 
         void test(string& s)
         {
-            Innocent_bystander i; // more trouble brewing
+            Innocent_bystander i;  // more trouble waiting
             string copy2 = s;      // copy the string
         } // destroy copy and then i
 

@@ -14740,7 +14740,7 @@ Thread creation is expensive.
         // process
     }
 
-    void master(istream& is)
+    void scheduler(istream& is)
     {
         for (Message m; is >> m; )
             run_list.push_back(new thread(worker, m));
@@ -14752,7 +14752,7 @@ Instead, we could have a set of pre-created worker threads processing the messag
 
     Sync_queue<Message> work;
 
-    void master(istream& is)
+    void scheduler(istream& is)
     {
         for (Message m; is >> m; )
             work.put(m);
